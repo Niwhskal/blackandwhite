@@ -5,35 +5,20 @@ require "bundler/setup"
 require "jekyll"
 require "listen"
 
-GITHUB_REPONAME = "Niwhskal/Niwhskal.github.io"
-
-
-desc "Generate blog files"
-task :generate do
-  Jekyll::Site.new(Jekyll.configuration({
-    "source"      => ".",
-    "destination" => "_site"
-  })).process
-end
-
-
-desc "Generate and publish blog to gh-pages"
-task :publish => [:generate] do
-  Dir.mktmpdir do |tmp|
-    cp_r "_site/.", tmp
-
-    pwd = Dir.pwd
-    Dir.chdir tmp
-
-    system "git init"
-    system "git add ."
-    message = "Site updated at #{Time.now.utc}"
-    system "git commit -m #{message.inspect}"
-    system "git remote add origin git@github.com:#{GITHUB_REPONAME}.git"
-    system "git push origin master --force"
-
-    Dir.chdir pwd
-  end
+desc "Commit _site/"
+task :deploy do
+  puts "\n## copying built files"
+  status = system("sudo cp -rp ~/Desktop/blackandwhite/_site/. ~/Desktop/test/Niwhskal.github.io/.")
+  puts "\n## adding built files"
+  status = system("git add .")
+  puts status ? "Success" : "Failed"
+  puts "\n## Committing a site build at #{Time.now.utc}"
+  message = "Build site at #{Time.now.utc}"
+  status = system("git commit -m \"#{message}\"")
+  puts status ? "Success" : "Failed"
+  puts "\n## Pushing commits to remote"
+  status = system("git push origin master:master")
+  puts status ? "Success" : "Failed"
 end
 
 def listen_ignore_paths(base, options)
