@@ -9,6 +9,8 @@ desc "Commit _site/"
 task :deploy do
   puts "\n## copying built files"
   status = system("sudo cp -rp ~/Desktop/blackandwhite/_site/. ~/Desktop/test/Niwhskal.github.io/.")
+  puts "\n## changing directory"
+  status = system("cd ~/Desktop/test/Niwhskal.github.io/")
   puts "\n## adding built files"
   status = system("git add .")
   puts status ? "Success" : "Failed"
