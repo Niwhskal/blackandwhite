@@ -287,6 +287,6 @@ defaults:
       related: true
 
 scholar:
-  style: assets/bibliography/evilsevier.csl 
+  style: acm-siggraph 
   locale: en
   source: _bibliography
